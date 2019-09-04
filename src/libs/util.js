@@ -19,13 +19,13 @@ util.ajax = axios.create({
     timeout: 30000
 });
 // 添加request拦截器 
-util.interceptors.request.use(config => {         
+util.ajax.interceptors.request.use(config => {         
     return config;
 }, error => {
     Promise.reject(error);
 });
 // 添加respone拦截器
-util.interceptors.response.use(                  
+util.ajax.interceptors.response.use(                  
     response => {
         let res={}; 
         res.status=response.status;

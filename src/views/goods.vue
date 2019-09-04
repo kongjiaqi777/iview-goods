@@ -1,7 +1,7 @@
 <template>
   <div>
       <Card>
-        <i-button @click="showDetail=true, this.modelType=1, this.modelTitle='添加商品'" type="primary" size="large">添加商品</i-button>
+        <i-button @click="handleAdd" type="primary" size="large">添加商品</i-button>
         <i-table :columns="columns" :data="tableData" style="margin-top: 30px;"></i-table>
         <Page
         :total="totalCount"
@@ -11,7 +11,7 @@
         show-total
         show-elevator
         @on-change="changePage">
-      </Page>
+        </Page>
       </Card>
       <Modal v-model="showDetail" :title="modelTitle" @on-ok="goodsSubmit" @on-cancel="clearFormData">
         <i-form ref="goodsForm" :model="addGoodsForm" :rules="addGoodsRule" :label-width="80">
@@ -300,6 +300,11 @@
         this.goodsParam.page = page
         this.goodsParam.perpage = this.pageSize
         this.getGoodsListData()
+      },
+      handleAdd () {
+        this.showDetail = true
+        this.modelType = 1
+        this.modelTitle = '添加商品'
       }
     }
   }
