@@ -1,8 +1,6 @@
-// import axios from '@/libs/api.request';
 import axios from '@/libs/util';
 // 商品列表
 export const getGoodsInfo = (data) => {
-    console.log(axios);
     return axios.ajax({
         url: 'v1/goods/list',
         method: 'get',

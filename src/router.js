@@ -65,5 +65,13 @@ export default [
     },
     icon: 'ios-contact',
     component: (resolve) => require(['./views/customer_list.vue'], resolve)
+}, {
+    path: '/login',
+    name: 'login',
+    meta: {
+        title: '登录'
+    },
+    icon: 'ios-book',
+    component: (resolve) => require(['./views/login.vue'], resolve)
 }]
 // export default routers;

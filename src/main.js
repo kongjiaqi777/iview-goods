@@ -7,7 +7,7 @@ import Util from './libs/util'
 // import App from './app.vue'
 import 'iview/dist/styles/iview.css'
 import Layout from './components/Layout'
-
+import store from '@/store/index'
 
 Vue.use(VueRouter);
 Vue.use(Vuex);
@@ -23,32 +23,32 @@ const RouterConfig = {
 };
 const router = new VueRouter(RouterConfig);
 
-router.beforeEach((to, from, next) => {
-    iView.LoadingBar.start();
-    Util.title(to.meta.title);
-    next();
-});
+// router.beforeEach((to, from, next) => {
+//     iView.LoadingBar.start();
+//     Util.title(to.meta.title);
+//     next();
+// });
 
-router.afterEach(() => {
-    iView.LoadingBar.finish();
-    window.scrollTo(0, 0);
-});
+// router.afterEach(() => {
+//     iView.LoadingBar.finish();
+//     window.scrollTo(0, 0);
+// });
 
 
-const store = new Vuex.Store({
-    state: {
+// const store = new Vuex.Store({
+//     state: {
 
-    },
-    getters: {
+//     },
+//     getters: {
 
-    },
-    mutations: {
+//     },
+//     mutations: {
 
-    },
-    actions: {
+//     },
+//     actions: {
 
-    }
-});
+//     }
+// });
 
 
 new Vue({
