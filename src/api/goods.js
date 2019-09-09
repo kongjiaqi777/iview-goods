@@ -52,3 +52,12 @@ export const modifyCategory = (info) => {
         data: info
     });
 };
+
+// 类别suggest
+export const suggestCategory = (info) => {
+    return axios.ajax({
+        url: 'v1/category/suggest',
+        method: 'post',
+        data: info
+    })
+}

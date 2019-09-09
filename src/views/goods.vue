@@ -29,7 +29,7 @@
             </i-select>
           </Form-item>
           <Form-item prop="category_id" label="商品类别">
-            <i-select v-model="addGoodsForm.category_id" placeholder="请选择商品类别">
+            <i-select v-model="addGoodsForm.category_id" placeholder="请选择商品类别" filterable>
               <i-option v-for="item in categoryItem" :key="item.id" :label="item.type_name" :value="item.id"></i-option>
             </i-select>
           </Form-item>
@@ -67,7 +67,7 @@
 </template>
   
   <script>
-  import { getGoodsInfo, addGoodsInfo, getCategoryList, modifyGoodsInfo } from '@/api/goods'
+  import { getGoodsInfo, addGoodsInfo, suggestCategory, modifyGoodsInfo } from '@/api/goods'
   import * as util from '@/utils/util'
   export default {
     name: 'goods_info',
@@ -216,7 +216,7 @@
         })
       },
       getCategoryListData () { // 获取类别列表
-        getCategoryList().then(res => {
+        suggestCategory().then(res => {
           this.categoryItem = res.data.info
         }).catch(err => {
           console.log(err)
