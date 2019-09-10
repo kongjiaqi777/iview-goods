@@ -12,10 +12,10 @@
     }
 </style>
 <template>
-    <div class="layout">
+    <div class="layout" v-show="this.showLayout">
         <Sider :style="{position: 'fixed', height: '100vh', left: 0, overflow: 'auto'}">
             <Menu :active-name="activeName" theme="dark" width="auto" @on-select="handleSelect">
-                <MenuItem v-for="item in routerLink" :name="item.name" :key="item.path">
+                <MenuItem v-for="item in routerLink" :name="item.name" :key="item.path" v-show="item.showPage">
                     <router-link :to="item.path" style="color: #fff;">{{ item.meta.title}}</router-link>
                 </MenuItem>
                 <!-- <Submenu v-for="item in routerLink" :name="item.name" :key="item.path">
@@ -72,10 +72,15 @@ import router from '@/router.js'
             return {
                 routerLink: [],
                 activeName: 'goodsInfo',
+                showLayout: true
             }
         },
         mounted () {
+            // console.log(this.$route)
             this.routerLink = router
+            // if (this.path === '/login') {
+            //     this.showLayout = false
+            // }
         },
         methods: {
             handleSelect (name) {
