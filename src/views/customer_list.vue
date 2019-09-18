@@ -1,8 +1,7 @@
 <template>
   <div>
      <Card>
-      <i-button type="primary" @click="showDetail=true, this.modelType=1, this.modelTitle='添加顾客'">添加</i-button>
-      <!-- <tables ref="tables" v-model="customerData" :columns="customerColumns"/> -->
+      <i-button type="primary" @click="addForm">添加</i-button>
       <i-table :columns="customerColumns" :data="customerData" style="margin-top: 30px;"></i-table>
       <Page
         :total="totalCount"
@@ -59,15 +58,15 @@
           </i-input>
         </Form-item>
         <Form-item prop="total_cost" label="总消费">
-          <i-input type="number" v-model="addCustomerForm.total_cost" placeholder="请输入顾客在本店总消费">
+          <i-input type="text" v-model="addCustomerForm.total_cost" placeholder="请输入顾客在本店总消费">
           </i-input>
         </Form-item>
         <Form-item prop="debt" label="欠款金额">
-          <i-input type="number" v-model="addCustomerForm.debt" placeholder="请输入顾客在本店的欠款金额">
+          <i-input type="text" v-model="addCustomerForm.debt" placeholder="请输入顾客在本店的欠款金额">
           </i-input>
         </Form-item>
         <Form-item prop="repayment" label="已还款金额">
-          <i-input type="number" v-model="addCustomerForm.repayment" placeholder="请输入顾客在本店已经还款金额">
+          <i-input type="text" v-model="addCustomerForm.repayment" placeholder="请输入顾客在本店已经还款金额">
           </i-input>
         </Form-item>
         <Form-item prop="comment" label="备注信息">
@@ -306,6 +305,11 @@ export default {
       this.customerParam.page = page
       this.customerParam.perpage = this.pageSize
       this.getCustomerListData()
+    },
+    addForm () {
+      this.showDetail=true
+      this.modelType=1
+      this.modelTitle='添加顾客'
     }
   }
 }

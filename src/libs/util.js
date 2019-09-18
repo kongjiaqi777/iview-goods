@@ -1,7 +1,7 @@
 import axios from 'axios';
 import env from '../config/env';
 import store from '@/store'
-import { getToken } from '@/api/user.js'
+// import { getToken } from '@/api/user.js'
 
 let util = {
 };
@@ -21,14 +21,14 @@ util.ajax = axios.create({
     timeout: 30000
 });
 // 添加request拦截器 
-util.ajax.interceptors.request.use(config => {
-    if (store.getters.token) {
-        config.headers['X-Token'] = getToken() // 让每个请求携带token--['X-Token']为自定义key 请根据实际情况自行修改
-    }
-    return config;
-}, error => {
-    Promise.reject(error);
-});
+// util.ajax.interceptors.request.use(config => {
+//     if (store.getters.token) {
+//         config.headers['X-Token'] = getToken() // 让每个请求携带token--['X-Token']为自定义key 请根据实际情况自行修改
+//     }
+//     return config;
+// }, error => {
+//     Promise.reject(error);
+// });
 // 添加respone拦截器
 util.ajax.interceptors.response.use(                  
     response => {
@@ -41,8 +41,6 @@ util.ajax.interceptors.response.use(
         if(error.response && error.response.status == 404){
             router.push('/blank.vue');
         }
-     
-          
         return Promise.reject(error.response);
     }
 );

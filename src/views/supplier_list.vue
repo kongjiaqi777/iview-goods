@@ -1,7 +1,7 @@
 <template>
   <div>
      <Card>
-      <i-button type="primary" @click="showDetail=true, this.modelType=1, this.modelTitle='添加新供应商'">添加</i-button>
+      <i-button type="primary" @click="clickAdd">添加</i-button>
       <i-table :columns="supplierColumns" :data="supplierData" style="margin-top: 30px;"></i-table>
       <Page
       :total="totalCount"
@@ -58,15 +58,15 @@
           </i-input>
         </Form-item>
         <Form-item prop="total_cost" label="总消费">
-          <i-input type="number" v-model="addSupplierForm.total_cost" placeholder="请输入顾客在本店总消费">
+          <i-input type="text" v-model="addSupplierForm.total_cost" placeholder="请输入顾客在本店总消费">
           </i-input>
         </Form-item>
         <Form-item prop="debt" label="欠款金额">
-          <i-input type="number" v-model="addSupplierForm.debt" placeholder="请输入顾客在本店的欠款金额">
+          <i-input type="text" v-model="addSupplierForm.debt" placeholder="请输入顾客在本店的欠款金额">
           </i-input>
         </Form-item>
         <Form-item prop="repayment" label="已还款金额">
-          <i-input type="number" v-model="addSupplierForm.repayment" placeholder="请输入顾客在本店已经还款金额">
+          <i-input type="text" v-model="addSupplierForm.repayment" placeholder="请输入顾客在本店已经还款金额">
           </i-input>
         </Form-item>
         <Form-item prop="comment" label="备注信息">
@@ -295,6 +295,11 @@ export default {
       this.supplierParam.page = page
       this.supplierParam.perpage = this.pageSize
       this.getSupplierListData()
+    },
+    clickAdd () {
+      this.showDetail=true
+      this.modelType=1
+      this.modelTitle='添加新供应商'
     }
   }
 }

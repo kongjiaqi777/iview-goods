@@ -1,7 +1,7 @@
 <template>
   <div>
      <Card>
-      <i-button type="primary" @click="showUpdateDetail=true, this.modelType=1, this.modelTitle='添加采购订单'">添加采购订单</i-button>
+      <i-button type="primary" @click="clickAdd">添加采购订单</i-button>
       <i-table :columns="purchaseOrderColumns" :data="purchaseData" style="margin-top: 30px;"></i-table>
       <Page
         :total="totalCount"
@@ -17,7 +17,7 @@
         v-model="showDetail"
         title="订单详情"
         @on-ok="showDetail=false" width="800">
-        <tables ref="record_table" v-model="purchaseRecordData" :columns="purchaseRecordColumns"/>
+        <i-table ref="record_table" v-model="purchaseRecordData" :columns="purchaseRecordColumns"></i-table>
     </Modal>
     <Modal v-model="showUpdateDetail" title="修改订单信息" @on-ok="AddOrder" @on-cancel="clearFormData" width="800">
       <i-form ref="addPurshaseOrder" :model="addPurchaseOrderForm" :rules="addPurchaseOrderRules" :label-width="100" style="width:713px;padding-top:50px;">
@@ -70,6 +70,7 @@
 <script>
 import { getPurchaseOrder, getPurchaseRecord, addPurchaseOrder } from '@/api/order'
 import { getSupplierList } from '@/api/supplier'
+import { getGoodsInfo } from '@/api/goods'
 import * as util from '@/utils/util'
 
 export default {
@@ -363,12 +364,15 @@ export default {
       purchaseParam: {
         page: 1,
         perpage: 20
-      }
+      },
+      // 商品列表
+      goodsList: []
     }
   },
   mounted () {
     this.getPurchaseOrderData()
     this.getSupplierListData()
+    this.getGoodsInfoList()
   },
   methods: {
     // 获取采购订单列表
@@ -471,7 +475,20 @@ export default {
       this.purchaseParam.page = page
       this.purchaseParam.perpage = this.pageSize
       this.getPurchaseOrderData()
-    }
+    },
+    // 商品列表
+    getGoodsInfoList () {
+      getGoodsInfo().then(res => {
+        this.goodsList = res.data.info.list
+      }).catch(err => {
+        console.log(err)
+      })
+    },
+    clickAdd () {
+      this.modelType=1
+      this.modelTitle='添加采购订单'
+      this.showUpdateDetail=true
+    }    
   }
 }
 </script>

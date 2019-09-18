@@ -35,3 +35,12 @@ export const getPaymentList = (data) => {
     params: data
   });
 };
+
+// 单位列表
+export const getUnitList = (data) => {
+  return axios.ajax({
+    url: 'v1/unit/list',
+    method: 'get',
+    params: data
+  });
+}

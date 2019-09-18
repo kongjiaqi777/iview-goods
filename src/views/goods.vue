@@ -79,6 +79,19 @@
           { title: '类别名称', key: 'type_name' },
           { title: '库存数量', key: 'num', editable: true },
           {
+            title: '单位',
+            key: 'unit_name',
+            // render: (h, params) => {
+            //   return h('div', function () {
+            //     if (params.row.unit === 0) {
+            //       return '-'
+            //     } else {
+            //       return params.row.unit_name
+            //     }
+            //   })
+            // }
+          },
+          {
             title: '进货价格',
             key: 'purchase_price',
             render: (h, params) => {
@@ -223,10 +236,10 @@
         })
       },
       goodsSubmit () { // 添加商品
-        console.log(this.addGoodsForm)
         this.$refs.goodsForm.validate((valid) => {
           if (valid) {
-            this.addGoodsForm.sale_price = this.moneyFormatterInput(this.addGoodsForm.sale_price)
+            this.addGoodsForm.sale_price = util.moneyFormatterInput(this.addGoodsForm.sale_price)
+            this.addGoodsForm.purchase_price = util.moneyFormatterInput(this.addGoodsForm.purchase_price)
             if (this.modelType === 1) {
               addGoodsInfo(this.addGoodsForm).then(res => {
                 if (res.data.code === 0) {

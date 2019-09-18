@@ -3,8 +3,8 @@ import iView from 'iview'
 import VueRouter from 'vue-router'
 import Routers from './router'
 import Vuex from 'vuex'
-import Util from './libs/util'
-import App from './app.vue'
+// import Util from './libs/util'
+// import App from './app.vue'
 import 'iview/dist/styles/iview.css'
 import Layout from './components/Layout'
 import store from '@/store/index'
@@ -17,11 +17,11 @@ Vue.use(iView);
 
 
 // 路由配置
-// const RouterConfig = {
-//     mode: 'history',
-//     routes: Routers
-// };
-// const router = new VueRouter(RouterConfig);
+const RouterConfig = {
+    mode: 'history',
+    routes: Routers
+};
+const router = new VueRouter(RouterConfig);
 
 // router.beforeEach((to, from, next) => {
 //     if (to.path === '/login') { // 当路由为login时就直接下一步操作
@@ -91,18 +91,12 @@ Vue.use(iView);
 // });
 
 
-// new Vue({
-//     el: '#app',
-//     router: router,
-//     store: store,
-//     render: h => h(Layout),
-//     components: { Layout },
-//     template: '<Layout/>'
-// });
 new Vue({
     el: '#app',
-    Routers,
-    store,
-    render: h => h(App)
-})
+    router: router,
+    // store: store,
+    render: h => h(Layout),
+    components: { Layout },
+    template: '<Layout/>'
+});
   
