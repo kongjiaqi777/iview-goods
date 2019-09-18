@@ -34,7 +34,7 @@
             <i-input type="text" v-model="addSalesOrderForm.total_price_display" disabled></i-input>
           </Form-item>
           <Form-item label="折扣金额" prop="discount">
-            <i-input type="text" v-model="addSalesOrderForm.discount"></i-input>
+            <i-input type="text" v-model="addSalesOrderForm.discount" disabled></i-input>
           </Form-item>
           <Form-item label="付款方式" prop="pay_way">
             <RadioGroup v-model="addSalesOrderForm.pay_way">
@@ -51,7 +51,7 @@
             </RadioGroup>
           </Form-item>
           <Form-item label="已付金额" prop="pay_number">
-            <i-input type="text" v-model="addSalesOrderForm.pay_number"></i-input>
+            <i-input type="text" v-model="addSalesOrderForm.pay_number" onblur="calDiscount"></i-input>
           </Form-item>
           <Form-item label="凭证" prop="photo">
             <i-input type="text" v-model="addSalesOrderForm.photo"></i-input>
@@ -199,15 +199,17 @@ export default {
       ],
       // 记录数据
       recordData: [],
+      // 是否显示订单详情modal
       showDetail: false,
+      // 是否显示添加/更新订单modal
       showUpdateDetail: false,
       // 增加订单表单
       addSalesOrderForm: {
         customer_id: 0, // 客户ID
         sales_record: [],
-        pay_way: 0, // 付款方式
+        pay_way: 1, // 付款方式
         discount: 0, // 折扣
-        is_pay_off: 0, // 是否全部付款
+        is_pay_off: 1, // 是否全部付款
         pay_number: 0, // 付款金额
         total_price: 0,
         photo: '',
@@ -241,10 +243,12 @@ export default {
         {
           goods_id: 0,
           num: 0,
+          unit: 0,
           sales_price: 0,
           sales_price_display: 0
         }
       ],
+      // 订单详情列
       saleRecordColumn: [
         {
           title: '序号',
@@ -306,6 +310,39 @@ export default {
                 }
               }
             })
+          }
+        },
+        {
+          title: '单位',
+          key: 'unit',
+          width: 150,
+          align: 'center',
+          render: (h, params) => {
+            return h('Select',
+              {
+                props: {
+                  value: this.saleRecord[params.index].unit, // 数据的双向绑定 data是定义好的数据
+                  transfer: true
+                },
+                on: {
+                  'on-change': (event) => { // select改变事件
+                    this.saleRecord[params.index].unit = event
+                    let obj = this.unitList.find(function (x) {
+                      if (x.id === event) {
+                        return x
+                      }
+                    })
+                  }
+                }
+              },
+              this.unitList.map(function (val, key) {
+                return h('Option', {
+                  props: {
+                    value: val.id
+                  }
+                }, val.name)
+              })
+            )
           }
         },
         {
@@ -382,21 +419,30 @@ export default {
         { value: 3, label: '支付宝' },
         { value: 4, label: '银行卡' }
       ],
+      // 是否付款
       payOff: [
         { value: 1, label: '已付款' },
         { value: 2, label: '欠款' },
         { value: 3, label: '部分付款' },
         { value: 4, label: '付款结余' }
       ],
+      // 增加订单modal类型1新增 2修改
       modelType: 1,
+      // 增加订单modal标题
       modelTitle: '添加销售订单',
+      // 订单数量
       totalCount: 0,
+      // 当前页
       currentPage: 1,
+      // 页码
       pageSize: 10,
+      // 订单列表筛选
       orderParam: {
         page: 1,
         perpage: 10
-      }
+      },
+      // 单位列表
+      unitList: []
     }
   },
   mounted () {
@@ -476,6 +522,8 @@ export default {
       this.addSalesOrderForm.total_price_display = 0
       this.addSalesOrderForm.total_price = 0
       this.saleRecord.forEach((item) => {
+        this.addSalesOrderForm.pay_number = util.moneyFormatterInput(this.addSalesOrderForm.pay_number)
+        this.addSalesOrderForm.discount = util.moneyFormatterInput(this.addSalesOrderForm.discount)
         // console.log(parseInt(item.num) * parseInt(item.sales_price))
         this.addSalesOrderForm.total_price_display += parseInt(item.num) * parseInt(item.sales_price_display)
         this.addSalesOrderForm.total_price = util.moneyFormatterInput(this.addSalesOrderForm.total_price_display)
@@ -541,9 +589,9 @@ export default {
       this.addSalesOrderForm.sales_record = rowData.sales_record
       // this.saleRecord = rowData.sales_record
       this.addSalesOrderForm.pay_way = rowData.pay_way
-      this.addSalesOrderForm.discount = rowData.discount
+      this.addSalesOrderForm.discount = util.montyFormatterOutput(rowData.discount)
       this.addSalesOrderForm.is_pay_off = rowData.is_pay_off
-      this.addSalesOrderForm.pay_number = rowData.pay_number
+      this.addSalesOrderForm.pay_number = util.montyFormatterOutput(rowData.pay_number)
       this.addSalesOrderForm.total_price = rowData.total_price
       this.addSalesOrderForm.total_price_display = util.montyFormatterOutput(rowData.total_price)
       this.addSalesOrderForm.photo = rowData.photo
@@ -562,6 +610,11 @@ export default {
       this.modelType = 1
       this.modelTitle = '添加销售订单'
       this.showUpdateDetail = true
+    },
+    calDiscount () {
+      if (this.addSalesOrderForm.is_pay_off === 1) {
+        this.addSalesOrderForm.discount = this.addSalesOrderForm.total_price - this.addSalesOrderForm.pay_number
+      }
     }
   }
 }

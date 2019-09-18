@@ -73,32 +73,23 @@
     name: 'goods_info',
     data () {
       return {
-        columns: [ // 商品表显示列
+        // 商品表显示列
+        columns: [
+          { title: '货物编号', key: 'id' },
           { title: '货物名称', key: 'name', sortable: true },
           { title: '货物型号', key: 'model' },
           { title: '类别名称', key: 'type_name' },
           { title: '库存数量', key: 'num', editable: true },
           {
             title: '单位',
-            key: 'unit_name',
-            // render: (h, params) => {
-            //   return h('div', function () {
-            //     if (params.row.unit === 0) {
-            //       return '-'
-            //     } else {
-            //       return params.row.unit_name
-            //     }
-            //   })
-            // }
+            key: 'unit_name'
           },
           {
             title: '进货价格',
             key: 'purchase_price',
             render: (h, params) => {
               return h('div',
-                // this.montyFormatterOutput(params.row.sale_price)
                 util.montyFormatterOutput(params.row.purchase_price)
-                // (parseInt(params.row.sale_price) / 100).toFixed(2)
               )
             }
           },
@@ -107,7 +98,6 @@
             key: 'sale_price',
             render: (h, params) => {
               return h('div',
-                // this.montyFormatterOutput(params.row.sale_price)
                 util.montyFormatterOutput(params.row.sale_price)
                 // (parseInt(params.row.sale_price) / 100).toFixed(2)
               )
@@ -144,19 +134,6 @@
                     on: {
                       click: () => {
                         this.clickEditRow(params)
-                        // this.showDetail = true
-                        // this.modelType = 2
-                        // this.modelTitle = '修改商品信息'
-                        // this.addGoodsForm.name = params.row.name
-                        // this.addGoodsForm.model = params.row.model
-                        // this.addGoodsForm.category_id = params.row.category_id
-                        // this.addGoodsForm.num = String(params.row.num)
-                        // this.addGoodsForm.sale_price = String(params.row.sale_price)
-                        // this.addGoodsForm.brand = params.row.brand
-                        // this.addGoodsForm.car_type = params.row.car_type
-                        // this.addGoodsForm.location = params.row.location
-                        // this.addGoodsForm.comment = params.row.comment
-                        // this.addGoodsForm.id = params.row.id
                       }
                     }
                   }, '修改')
@@ -165,10 +142,14 @@
             }
           }
         ],
-        tableData: [], // 商品表数据
-        modelTitle: '添加商品', // 标题
-        showDetail: false, // 是否显示模态框
-        addGoodsForm: { // 添加商品数据
+        // 商品表数据
+        tableData: [],
+        // 标题
+        modelTitle: '添加商品',
+        // 是否显示模态框
+        showDetail: false,
+        // 添加商品数据
+        addGoodsForm: {
           name: '',
           model: '',
           category_id: 0,
@@ -182,7 +163,8 @@
           voltage: 0,
           id: 0
         },
-        addGoodsRule: { // 添加validate
+        // 添加validate
+        addGoodsRule: {
           name: [
             { required: true, message: '请填写商品名称', trigger: 'blur' }
           ],
@@ -196,20 +178,27 @@
             { required: true, message: '请填写建议零售价', trigger: 'blur' }
           ]
         },
-        categoryItem: { // 类别列表
+        // 类别列表
+        categoryItem: {
         },
-        modelType: 1, // 对话框类别 1添加 2更新
+        // 对话框类别 1添加 2更新
+        modelType: 1,
+        // 电压
         voltageItem: [
           { value: 0, label: '-' },
           { value: 1, label: '12V' },
           { value: 2, label: '24V' }
         ],
+        // 总商品数
         totalCount: 0,
+        // 当前页
         currentPage: 1,
-        pageSize: 10,
+        // 页码
+        pageSize: 20,
+        // 商品查询参数
         goodsParam: {
           page: 1,
-          perpage: 10
+          perpage: 20
         }
       }
     },
@@ -218,24 +207,26 @@
       this.getCategoryListData()
     },
     methods: {
-      getGoodsListData () { // 获取商品列表
+      // 获取商品列表
+      getGoodsListData () {
         getGoodsInfo(this.goodsParam).then(res => {
           this.tableData = res.data.info.list
           this.totalCount = res.data.info.pagination.total_count
           this.currentPage = res.data.info.pagination.page
-          // this.pageSize = parseInt(res.data.info.pagination.perpage)
         }).catch(err => {
           console.log(err)
         })
       },
-      getCategoryListData () { // 获取类别列表
+      // 获取类别列表
+      getCategoryListData () {
         suggestCategory().then(res => {
           this.categoryItem = res.data.info
         }).catch(err => {
           console.log(err)
         })
       },
-      goodsSubmit () { // 添加商品
+      // 添加商品
+      goodsSubmit () {
         this.$refs.goodsForm.validate((valid) => {
           if (valid) {
             this.addGoodsForm.sale_price = util.moneyFormatterInput(this.addGoodsForm.sale_price)
@@ -277,6 +268,7 @@
           }
         })
       },
+      // 清理表单
       clearFormData () {
         this.addGoodsForm.name = ''
         this.addGoodsForm.model = ''
@@ -291,6 +283,7 @@
         this.addGoodsForm.purchase_price = 0
         this.addGoodsForm.voltage = 0
       },
+      // 点击编辑
       clickEditRow (params) {
         this.showDetail = true
         this.modelType = 2
@@ -308,12 +301,14 @@
         this.addGoodsForm.purchase_price = util.montyFormatterOutput(params.row.purchase_price)
         this.addGoodsForm.voltage = params.row.voltage
       },
+      // 点击页码
       changePage (page) {
         this.currentPage = page
         this.goodsParam.page = page
         this.goodsParam.perpage = this.pageSize
         this.getGoodsListData()
       },
+      // 点击添加商品
       handleAdd () {
         this.showDetail = true
         this.modelType = 1
