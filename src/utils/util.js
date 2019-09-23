@@ -94,3 +94,14 @@ export function getPaymentType (type) {
         return '供应商';
     }
 }
+
+export function getUnitType (type) {
+    switch (type) {
+        case 1:
+            return '一对一';
+        case 2:
+            return '一对多';
+        case 3:
+            return '手动扣';
+    }
+}

@@ -1,23 +1,16 @@
 <template>
-    <div>
-        <router-view></router-view>
+    <div id="app">
+        <login></login>
     </div>
 </template>
 <script>
-    export default {
-        data() {
-            return {
+import login from '@/views/login' // 引入login.vue组件
 
-            };
-        },
-        mounted() {
+export default {
+    name: 'App',
+    components: {
+        'login': login 
+    }
+}
 
-        },
-        beforeDestroy() {
-
-        },
-        methods: {
-
-        }
-    };
 </script>

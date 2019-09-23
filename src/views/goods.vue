@@ -40,11 +40,11 @@
           <!-- 单位抵扣方式 -->
           <Form-item prop="unit_type" label="库存扣减方式">
             <i-select v-model="addGoodsForm.unit_type" placeholder="请选择商品库存减扣方式" filterable>
-              <i-option v-for="item in unitTypeItem" :key="item.id" :label="item.label" :value="item.id"></i-option>
+              <i-option v-for="item in unitTypeItem" :key="item.id" :label="item.label" :value="item.id" on-change="unitTypeChange"></i-option>
             </i-select>
           </Form-item>
           <!-- 一对多抵扣的规格 -->
-          <Form-item prop="unit_convert_id" label="库存扣减规格">
+          <Form-item prop="unit_convert_id" label="库存扣减规格" v-show="convertShow">
             <i-select v-model="addGoodsForm.unit_convert_id" placeholder="请选择商品库存减扣规格" filterable>
               <i-option v-for="item in unitConvertItem" :key="item.id" :label="item.label" :value="item.id"></i-option>
             </i-select>
@@ -129,7 +129,6 @@
             render: (h, params) => {
               return h('div',
                 util.montyFormatterOutput(params.row.sale_price)
-                // (parseInt(params.row.sale_price) / 100).toFixed(2)
               )
             }
           },
@@ -139,6 +138,15 @@
             render: (h, params) => {
               return h('div',
                 util.voltageFormatterOutput(params.row.voltage)
+              )
+            }
+          },
+          {
+            title: '单位减扣方式',
+            key: 'unit_type',
+            render: (h, params) => {
+              return h('div',
+                util.getUnitType(params.row.unit_type)
               )
             }
           },
@@ -248,7 +256,8 @@
           { value: 3, label: '手动减扣' }
         ],
         // 库存减扣规格
-        unitConvertItem: []
+        unitConvertItem: [],
+        convertShow: true
       }
     },
     mounted () {
@@ -369,6 +378,13 @@
         unitSuggest().then(res => {
           this.unitItem = res.data.info
         })
+      },
+      unitTypeChange() {
+        if (this.addGoodsForm.unit_type === 1) {
+          this.convertShow = false
+        } else if (this.addGoodsForm.unit_type === 2) {
+          this.convertShow = true
+        }
       }
     }
   }

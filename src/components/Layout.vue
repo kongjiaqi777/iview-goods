@@ -15,7 +15,7 @@
     <div class="layout" v-show="this.showLayout">
         <Sider :style="{position: 'fixed', height: '100vh', left: 0, overflow: 'auto'}">
             <Menu :active-name="activeName" theme="dark" width="auto" @on-select="handleSelect">
-                <MenuItem v-for="item in routerLink" :name="item.name" :key="item.path" v-show="item.showPage">
+                <MenuItem v-for="item in routerLink" :name="item.name" :key="item.path">
                     <router-link :to="item.path" style="color: #fff;">{{ item.meta.title}}</router-link>
                 </MenuItem>
                 <!-- <Submenu v-for="item in routerLink" :name="item.name" :key="item.path">
@@ -51,15 +51,6 @@
                 <keep-alive>
                     <router-view></router-view>
                 </keep-alive>
- 
-                <!-- <Breadcrumb :style="{margin: '16px 0'}">
-                    <BreadcrumbItem>Home</BreadcrumbItem>
-                    <BreadcrumbItem>Components</BreadcrumbItem>
-                    <BreadcrumbItem>Layout</BreadcrumbItem>
-                </Breadcrumb>
-                <Card>
-                    <div style="height: 600px">Content</div>
-                </Card> -->
             </Content>
         </Layout>
     </div>
@@ -76,7 +67,6 @@ import router from '@/router.js'
             }
         },
         mounted () {
-            // console.log(this.$route)
             this.routerLink = router
             // if (this.path === '/login') {
             //     this.showLayout = false
@@ -89,11 +79,7 @@ import router from '@/router.js'
             },
             getOpenedNamesByActiveName (name) {
                 return this.$route.matched.map(item => item.name).filter(item => item !== name)
-            },
-            // updateOpenName (name) {
-            //     if (name === this.$config.homeName) this.openedNames = []
-            //     else this.openedNames = this.getOpenedNamesByActiveName(name)
-            // }
+            }
         }
     }
 </script>

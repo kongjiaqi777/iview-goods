@@ -1,6 +1,4 @@
 import { resolve } from "path";
-// import Layout from '@/components/Layout'
-
 export default [
 {
     path: '/home',

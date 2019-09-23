@@ -4,7 +4,7 @@ import VueRouter from 'vue-router'
 import Routers from './router'
 import Vuex from 'vuex'
 // import Util from './libs/util'
-// import App from './app.vue'
+import App from './app.vue'
 import 'iview/dist/styles/iview.css'
 import Layout from './components/Layout'
 import store from '@/store/index'
@@ -95,8 +95,10 @@ new Vue({
     el: '#app',
     router: router,
     // store: store,
-    render: h => h(Layout),
-    components: { Layout },
-    template: '<Layout/>'
+    // render: h => h(Layout),
+    components: { App },
+
+    // components: { Layout },
+    template: '<App/>'
 });
   
