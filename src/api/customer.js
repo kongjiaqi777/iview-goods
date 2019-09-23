@@ -44,3 +44,13 @@ export const getUnitList = (data) => {
     params: data
   });
 }
+
+// 单位suggest
+export const unitSuggest = (data) => {
+  return axios.ajax({
+    url: 'v1/unit/suggest',
+    method: 'get',
+    params: data
+  })
+}
+

@@ -15,48 +15,77 @@
       </Card>
       <Modal v-model="showDetail" :title="modelTitle" @on-ok="goodsSubmit" @on-cancel="clearFormData">
         <i-form ref="goodsForm" :model="addGoodsForm" :rules="addGoodsRule" :label-width="80">
-          <Form-item prop="name" label="商品名称">
-            <i-input type="text" v-model="addGoodsForm.name" placeholder="请输入商品名称">
-            </i-input>
-          </Form-item>
-          <Form-item prop="model" label="商品型号">
-            <i-input type="text" v-model="addGoodsForm.model" placeholder="请输入商品型号">
-            </i-input>
-          </Form-item>
-          <Form-item prop="voltage" label="电压">
-            <i-select v-model="addGoodsForm.voltage" placeholder="请选择电压">
-              <i-option v-for="item in voltageItem" :key="item.value" :label="item.label" :value="item.value"></i-option>
-            </i-select>
-          </Form-item>
+          <!-- 商品类别 -->
           <Form-item prop="category_id" label="商品类别">
             <i-select v-model="addGoodsForm.category_id" placeholder="请选择商品类别" filterable>
               <i-option v-for="item in categoryItem" :key="item.id" :label="item.type_name" :value="item.id"></i-option>
             </i-select>
           </Form-item>
+          <!-- 商品名称 -->
+          <Form-item prop="name" label="商品名称">
+            <i-input type="text" v-model="addGoodsForm.name" placeholder="请输入商品名称">
+            </i-input>
+          </Form-item>
+          <!-- 商品型号 -->
+          <Form-item prop="model" label="商品型号">
+            <i-input type="text" v-model="addGoodsForm.model" placeholder="请输入商品型号">
+            </i-input>
+          </Form-item>
+          <!-- 商品规格 -->
+          <Form-item prop="unit" label="商品规格">
+            <i-select v-model="addGoodsForm.unit" placeholder="请选择商品规格" filterable>
+              <i-option v-for="item in unitItem" :key="item.id" :label="item.unit_name" :value="item.id"></i-option>
+            </i-select>
+          </Form-item>
+          <!-- 单位抵扣方式 -->
+          <Form-item prop="unit_type" label="库存扣减方式">
+            <i-select v-model="addGoodsForm.unit_type" placeholder="请选择商品库存减扣方式" filterable>
+              <i-option v-for="item in unitTypeItem" :key="item.id" :label="item.label" :value="item.id"></i-option>
+            </i-select>
+          </Form-item>
+          <!-- 一对多抵扣的规格 -->
+          <Form-item prop="unit_convert_id" label="库存扣减规格">
+            <i-select v-model="addGoodsForm.unit_convert_id" placeholder="请选择商品库存减扣规格" filterable>
+              <i-option v-for="item in unitConvertItem" :key="item.id" :label="item.label" :value="item.id"></i-option>
+            </i-select>
+          </Form-item>
+          <!-- 额定电压 -->
+          <Form-item prop="voltage" label="额定电压">
+            <i-select v-model="addGoodsForm.voltage" placeholder="请选择电压">
+              <i-option v-for="item in voltageItem" :key="item.value" :label="item.label" :value="item.value"></i-option>
+            </i-select>
+          </Form-item>
+          <!-- 商品库存 -->
           <Form-item prop="num" label="商品库存">
             <i-input type="text" v-model="addGoodsForm.num" placeholder="请输入数量">
             </i-input>
           </Form-item>
-          <Form-item prop="purchase_price" label="进货价格">
+          <!-- 采购价格 -->
+          <Form-item prop="purchase_price" label="采购价格">
               <i-input type="text" v-model="addGoodsForm.purchase_price" placeholder="请输入建议售价">
               </i-input>
           </Form-item>
-          <Form-item prop="sale_price" label="建议售价">
+          <!-- 建议售价 -->
+          <Form-item prop="sale_price" label="销售价格">
             <i-input type="text" v-model="addGoodsForm.sale_price" placeholder="请输入建议售价">
             </i-input>
           </Form-item>
+          <!-- 品牌 -->
           <Form-item prop="brand" label="品牌">
             <i-input type="text" v-model="addGoodsForm.brand" placeholder="请输入品牌">
             </i-input>
           </Form-item>
+          <!-- 适用车型 -->
           <Form-item prop="car_type" label="适用车型">
             <i-input type="text" v-model="addGoodsForm.car_type" placeholder="请输入适用车型">
             </i-input>
           </Form-item>
+          <!-- 存放位置 -->
           <Form-item prop="location" label="存放位置">
             <i-input type="text" v-model="addGoodsForm.location" placeholder="请输入位置">
             </i-input>
           </Form-item>
+          <!-- 备注信息 -->
           <Form-item prop="comment" label="备注信息">
             <i-input type="text" v-model="addGoodsForm.comment" placeholder="请输入备注信息">
             </i-input>
@@ -68,6 +97,7 @@
   
   <script>
   import { getGoodsInfo, addGoodsInfo, suggestCategory, modifyGoodsInfo } from '@/api/goods'
+  import { unitSuggest } from '@/api/customer'
   import * as util from '@/utils/util'
   export default {
     name: 'goods_info',
@@ -150,6 +180,7 @@
         showDetail: false,
         // 添加商品数据
         addGoodsForm: {
+          id: 0,
           name: '',
           model: '',
           category_id: 0,
@@ -161,7 +192,9 @@
           location: '',
           comment: '',
           voltage: 0,
-          id: 0
+          unit: 0,
+          unit_type: 1,
+          unit_convert_id: 0
         },
         // 添加validate
         addGoodsRule: {
@@ -176,6 +209,12 @@
           ],
           sale_price: [
             { required: true, message: '请填写建议零售价', trigger: 'blur' }
+          ],
+          purchase_price: [
+            { required: true, message: '请填写进货价格', trigger: 'blur' }
+          ],
+          unit: [
+            { required: true, message: '请选择单位' }
           ]
         },
         // 类别列表
@@ -199,12 +238,23 @@
         goodsParam: {
           page: 1,
           perpage: 20
-        }
+        },
+        // 单位列表
+        unitItem: [],
+        // 库存扣减方式
+        unitTypeItem: [
+          { value: 1, label: '一对一减扣' },
+          { value: 2, label: '一对多减扣' },
+          { value: 3, label: '手动减扣' }
+        ],
+        // 库存减扣规格
+        unitConvertItem: []
       }
     },
     mounted () {
       this.getGoodsListData()
       this.getCategoryListData()
+      this.getUnitSuggest()
     },
     methods: {
       // 获取商品列表
@@ -313,6 +363,12 @@
         this.showDetail = true
         this.modelType = 1
         this.modelTitle = '添加商品'
+      },
+      // 单位
+      getUnitSuggest() {
+        unitSuggest().then(res => {
+          this.unitItem = res.data.info
+        })
       }
     }
   }
