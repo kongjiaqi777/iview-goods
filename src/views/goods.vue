@@ -257,6 +257,7 @@
         ],
         // 库存减扣规格
         unitConvertItem: [],
+        // 是否显示单位抵扣规则
         convertShow: true
       }
     },
@@ -379,6 +380,7 @@
           this.unitItem = res.data.info
         })
       },
+      // 单位抵扣方式切换
       unitTypeChange() {
         if (this.addGoodsForm.unit_type === 1) {
           this.convertShow = false

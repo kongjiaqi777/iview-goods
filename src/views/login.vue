@@ -82,34 +82,35 @@ html,body {
         <div class="from-wrap">
             <h2>登录</h2>
             <Form ref="loginData" :model="loginData" :rules="ruleValidate" :label-width="80">
-                <FormItem label="Account" prop="acct">
-                    <Input type="password" v-model="loginData.acct" placeholder="请输入账号"></Input>
+                <FormItem label="Account" prop="phone">
+                    <Input type="text" v-model="loginData.phone" placeholder="请输入账号"></Input>
                 </FormItem>
-                <FormItem label="Password" prop="pass">
-                    <Input type="password" v-model="loginData.pass" placeholder="请输入密码"></Input>
+                <FormItem label="Password" prop="password">
+                    <Input type="password" v-model="loginData.password" placeholder="请输入密码"></Input>
                 </FormItem>
                 <FormItem class="form-footer">
-                    <Button type="primary" @click="handleSubmit('loginData')">Submit</Button>
-                    <Button type="ghost" @click="handleReset('loginData')" style="margin-left: 8px">Reset</Button>
+                    <Button type="primary" @click="handleSubmit">Submit</Button>
+                    <Button type="ghost" @click="handleReset" style="margin-left: 8px">Reset</Button>
                 </FormItem>
             </Form>
         </div>
     </div>
 </template>
 <script>
+import { login } from '@/api/user'
 export default {
   data () {
     return {
       loginData: {
-        acct:'',
-        pass:''
+        phone:'',
+        password:''
       },
       ruleValidate: {
-        acct: [
+        phone: [
             { required: true, message: '账号不能为空', trigger: 'blur' },
             { min: 3, max: 16, message: '账号长度3-16个字符', trigger: 'blur' }
         ],
-        pass: [
+        password: [
             { required: true, message: '密码不能为空', trigger: 'blur' },
             { type: 'string', min: 6, max: 16, message: '密码长度6-16个字符', trigger: 'blur' }
         ]
@@ -117,17 +118,23 @@ export default {
     }
   },
   methods: {
-    handleSubmit (name) {
-      this.$refs[name].validate((valid) => {
+    handleSubmit () {
+      this.$refs['loginData'].validate((valid) => {
         if (valid) {
-          this.$Message.success('提交成功!')
+            login(this.loginData).then(res => {
+                if(res.data.info) {
+                    
+                }
+                this.$router.push({ path: '/' });
+            })
+            this.$Message.success('提交成功!')
         } else {
-          this.$Message.error('表单验证失败!')
+            this.$Message.error('表单验证失败!')
         }
       })
     },
-    handleReset (name) {
-        this.$refs[name].resetFields();
+    handleReset () {
+        this.$refs['loginData'].resetFields();
     }
   }
 }

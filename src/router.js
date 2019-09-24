@@ -97,7 +97,17 @@ export default [
 // import Router from 'vue-router'
 
 // Vue.use(Router)
-
+// const route = new Router({
+//     mode: "history",
+//     base: "/",
+//     routes: [
+//         {
+//             path: '/login',
+//             name: 'login',
+//             component: () => import('@/views/login')
+//         }
+//     ]
+// })
 // /* Layout */
 
 
